@@ -23,7 +23,7 @@ const CategoryList = ({ categories }) => {
                 <Image
                   src={cat.image}
                   alt={`${cat.category} image`}
-                  layout="fill"
+                  layout="intrinsic"
                   sizes="20vw"
                   className="object-cover"
                 />
