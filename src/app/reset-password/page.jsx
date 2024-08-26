@@ -1,35 +1,40 @@
 "use client";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "react-toastify";
-import { account } from "../../context/appwrite";
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { account } from '../../context/appwrite';
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [secret, setSecret] = useState('');
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const userId = searchParams.get("userId");
-  const secret = searchParams.get("secret");
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setUserId(searchParams.get('userId') || '');
+    setSecret(searchParams.get('secret') || '');
+  }, []);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
+      toast.error('Passwords do not match.');
       return;
     }
 
     setIsLoading(true);
     try {
       await account.updateRecovery(userId, secret, password, confirmPassword);
-      toast.success("Password reset successfully.");
+      toast.success('Password reset successfully.');
       setTimeout(() => {
-        router.push("/login");
+        router.push('/login');
       }, 2000);
     } catch (error) {
-      toast.error("Failed to reset password. Please try again.");
+      toast.error('Failed to reset password. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +70,7 @@ const ResetPassword = () => {
           className="bg-lama text-white bg-green-700 p-2 rounded-md disabled:bg-pink-200 disabled:text-white disabled:cursor-not-allowed"
           disabled={isLoading}
         >
-          {isLoading ? "Resetting..." : "Reset Password"}
+          {isLoading ? 'Resetting...' : 'Reset Password'}
         </button>
       </form>
     </div>
