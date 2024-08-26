@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
 import Filters from '../../components/Filter';
 import ProductList from '../../components/ProductList';
-import Loading from '../../components/Loading';
 import { databases } from '../../context/appwrite';
+import Loading from '../../components/Loading';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 
+// Client-side data fetching functions
 const fetchProducts = async () => {
   try {
     const response = await databases.listDocuments(
@@ -48,7 +49,8 @@ const fetchGenders = async () => {
   }
 };
 
-const ShopClient = () => {
+const Shop = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
@@ -121,6 +123,7 @@ const ShopClient = () => {
     const { size, minPrice, maxPrice, category, gender, sort } = filterParams;
   
     let filtered = products;
+    // toast.log(filtered)
     const idToNameCategoryMap = (id) => categoryMap[id] || '';
     const idToNameGenderMap = (id) => genderMap[id] || '';
 
@@ -203,4 +206,4 @@ const ShopClient = () => {
   );
 };
 
-export default ShopClient;
+export default Shop;
