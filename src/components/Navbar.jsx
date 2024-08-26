@@ -19,7 +19,7 @@ const Navbar = () => {
         const user = await account.get();
         setLoggedIn(!!user); // Set loggedIn to true if user exists, otherwise false
       } catch (error) {
-        toast.error("Error fetching user session.");
+        // toast.error("Error fetching user session.");
       }
     };
     checkUserSession();
