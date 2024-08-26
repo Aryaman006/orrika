@@ -1,12 +1,12 @@
-"use client";
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 import Filters from '../../components/Filter';
 import ProductList from '../../components/ProductList';
-import { databases } from '../../context/appwrite';
 import Loading from '../../components/Loading';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { databases } from '../../context/appwrite';
 
 const fetchProducts = async () => {
   try {
@@ -47,8 +47,7 @@ const fetchGenders = async () => {
   }
 };
 
-const Shop = () => {
-  const router = useRouter();
+const ShopClient = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
@@ -100,7 +99,7 @@ const Shop = () => {
       }
     };
     fetchData();
-  }, [searchQuery, filterParams]);
+  }, [searchQuery]);
 
   useEffect(() => {
     // Create ID-to-name mappings
@@ -121,7 +120,6 @@ const Shop = () => {
     const { size, minPrice, maxPrice, category, gender, sort } = filterParams;
   
     let filtered = products;
-    // toast.log(filtered)
     const idToNameCategoryMap = (id) => categoryMap[id] || '';
     const idToNameGenderMap = (id) => genderMap[id] || '';
 
@@ -204,4 +202,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default ShopClient;
