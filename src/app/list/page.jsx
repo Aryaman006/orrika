@@ -6,7 +6,7 @@ import Filters from '../../components/Filter';
 import ProductList from '../../components/ProductList';
 import { databases } from '../../context/appwrite';
 import Loading from '../../components/Loading';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 // Client-side data fetching functions
@@ -51,9 +51,7 @@ const fetchGenders = async () => {
 
 const Shop = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get('search') || '';
-
+  const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -69,6 +67,7 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -81,20 +80,6 @@ const Shop = () => {
         setProducts(productsData);
         setCategories(categoriesData);
         setGenders(gendersData);
-
-        // Create ID-to-name mappings
-        const categoryMap = categoriesData.reduce((acc, category) => {
-          acc[category.$id] = category.name;
-          return acc;
-        }, {});
-
-        const genderMap = gendersData.reduce((acc, gender) => {
-          acc[gender.$id] = gender.name;
-          return acc;
-        }, {});
-
-        // Apply filters and search
-        applyFiltersAndSearch(productsData, filterParams, categoryMap, genderMap, searchQuery);
       } catch (error) {
         setError(error);
       } finally {
@@ -102,75 +87,77 @@ const Shop = () => {
       }
     };
     fetchData();
-  }, [searchQuery]);
+  }, []);
 
+  // Update filtered products when data or filters change
   useEffect(() => {
-    // Create ID-to-name mappings
-    const categoryMap = categories.reduce((acc, category) => {
-      acc[category.$id] = category.category;
-      return acc;
-    }, {});
+    if (products.length > 0) {
+      // Create ID-to-name mappings
+      const categoryMap = categories.reduce((acc, category) => {
+        acc[category.$id] = category.name;
+        return acc;
+      }, {});
 
-    const genderMap = genders.reduce((acc, gender) => {
-      acc[gender.$id] = gender.name;
-      return acc;
-    }, {});
+      const genderMap = genders.reduce((acc, gender) => {
+        acc[gender.$id] = gender.name;
+        return acc;
+      }, {});
 
-    applyFiltersAndSearch(products, filterParams, categoryMap, genderMap, searchQuery);
-  }, [filterParams, products, categories, genders, searchQuery]);
+      const applyFiltersAndSearch = (products, filterParams, categoryMap, genderMap, searchQuery) => {
+        const { size, minPrice, maxPrice, category, gender, sort } = filterParams;
+    
+        let filtered = products;
+        const idToNameCategoryMap = (id) => categoryMap[id] || '';
+        const idToNameGenderMap = (id) => genderMap[id] || '';
 
-  const applyFiltersAndSearch = (products, filterParams, categoryMap, genderMap, searchQuery) => {
-    const { size, minPrice, maxPrice, category, gender, sort } = filterParams;
-  
-    let filtered = products;
-    // toast.log(filtered)
-    const idToNameCategoryMap = (id) => categoryMap[id] || '';
-    const idToNameGenderMap = (id) => genderMap[id] || '';
-
-    // Apply search query filter
-    if (searchQuery) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        idToNameCategoryMap(product.category).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        idToNameGenderMap(product.gender).toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-  
-    // Apply size filter
-    if (size) {
-      filtered = filtered.filter(product => product.size === size);
-    }
-    // Apply price filters
-    if (minPrice) {
-      filtered = filtered.filter(product => product.price >= parseFloat(minPrice));
-    }
-    if (maxPrice) {
-      filtered = filtered.filter(product => product.price <= parseFloat(maxPrice));
-    }
-    // Apply category filter
-    if (category) {
-      filtered = filtered.filter(product => categoryMap[product.category] === category);
-    }
-    // Apply gender filter
-    if (gender) {
-      filtered = filtered.filter(product => genderMap[product.gender] === gender);
-    }
-    // Apply sorting
-    if (sort) {
-      const [order, key] = sort.split(' ');
-      filtered.sort((a, b) => {
-        if (key === 'price') {
-          return order === 'asc' ? a.price - b.price : b.price - a.price;
-        } else if (key === 'lastUpdated') {
-          return order === 'asc' ? new Date(b.$createdAt) - new Date(a.$createdAt) : new Date(a.$createdAt) - new Date(b.$createdAt);
+        // Apply search query filter
+        if (searchQuery) {
+          filtered = filtered.filter(product =>
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            idToNameCategoryMap(product.category).toLowerCase().includes(searchQuery.toLowerCase()) ||
+            idToNameGenderMap(product.gender).toLowerCase().includes(searchQuery.toLowerCase())
+          );
         }
-        return 0;
-      });
-    }
+    
+        // Apply size filter
+        if (size) {
+          filtered = filtered.filter(product => product.size === size);
+        }
+        // Apply price filters
+        if (minPrice) {
+          filtered = filtered.filter(product => product.price >= parseFloat(minPrice));
+        }
+        if (maxPrice) {
+          filtered = filtered.filter(product => product.price <= parseFloat(maxPrice));
+        }
+        // Apply category filter
+        if (category) {
+          filtered = filtered.filter(product => categoryMap[product.category] === category);
+        }
+        // Apply gender filter
+        if (gender) {
+          filtered = filtered.filter(product => genderMap[product.gender] === gender);
+        }
+        // Apply sorting
+        if (sort) {
+          const [order, key] = sort.split(' ');
+          filtered.sort((a, b) => {
+            if (key === 'price') {
+              return order === 'asc' ? a.price - b.price : b.price - a.price;
+            } else if (key === 'lastUpdated') {
+              return order === 'asc' ? new Date(b.$createdAt) - new Date(a.$createdAt) : new Date(a.$createdAt) - new Date(b.$createdAt);
+            }
+            return 0;
+          });
+        }
 
-    setFilteredProducts(filtered);
-  };
+        setFilteredProducts(filtered);
+      };
+
+      applyFiltersAndSearch(products, filterParams, categoryMap, genderMap, searchQuery);
+    }
+  }, [products, categories, genders, filterParams, searchQuery]);
 
   const handleFilterChange = (newFilters) => {
     setFilterParams(prevFilters => ({ ...prevFilters, ...newFilters }));
