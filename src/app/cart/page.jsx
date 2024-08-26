@@ -25,6 +25,7 @@ const CartPage = () => {
       try {
         const userData = await account.get();
         setUser(userData);
+        console.log(userData);
 
         // Fetch the user's saved addresses
         const addressList = await databases.listDocuments(
