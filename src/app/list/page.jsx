@@ -100,7 +100,7 @@ const Shop = () => {
       }
     };
     fetchData();
-  }, [searchQuery]);
+  }, [searchQuery, filterParams]);
 
   useEffect(() => {
     // Create ID-to-name mappings
