@@ -69,12 +69,13 @@ const Login = () => {
             Forgot Password?
           </div>
         </div>
-        <div
-          className="text-sm underline cursor-pointer"
-          onClick={() => handleNavigate("/register")}
-        >
-          Don't have an account? Register
+       <div
+        className="text-sm underline cursor-pointer"
+         onClick={() => handleNavigate("/register")}
+         >
+         Don&apos;t have an account? Register
         </div>
+
       </form>
     </div>
   );
