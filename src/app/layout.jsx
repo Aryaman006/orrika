@@ -12,7 +12,7 @@ import { ProductProvider } from "../context/productContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Favindo",
+  title: "ORRIKA",
   description: "A fashion e-comm",
 };
 

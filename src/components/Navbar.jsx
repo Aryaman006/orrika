@@ -37,19 +37,19 @@ const Navbar = () => {
   };
 
   return (
-    <div className='sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all md:p-6 items-center no-print'>
+    <div className='sticky z-[100] m-5 h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all md:p-6 items-center no-print'>
       {/* Mobile */}
       <div className="h-full flex items-center justify-between md:hidden">
         <Link href="/" className='flex items-center gap-3'>
-          <Image src="/logo2.png" width={100} height={100} alt="Logo" />
+          <Image src="/logo2.png" width={60} height={60} alt="Logo" />
           {/* <div className="text-2xl tracking-wide">FAVINDO</div> */}
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex p-10 items-center gap-6">
           <NavIcons />
           <Menu />
         </div>
       </div>
-      <div className="search-bar md:hidden">
+      <div className="search-bar md:hidden pr-8">
         <SearchBar />
       </div>
       {/* Big screen */}
@@ -57,7 +57,7 @@ const Navbar = () => {
         {/* Left */}
         <div className="w-1/3 md:w-1/2 flex items-center gap-12">
           <Link href="/" className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Logo" width={150} height={150} />
+            <Image src="/logo2.png" alt="Logo" width={80} height={80} />
             {/* <div className="text-2xl tracking-wide">FAVINDO</div> */}
           </Link>
           <div className="hidden md:flex gap-4 items-center">
