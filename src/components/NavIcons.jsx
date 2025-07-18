@@ -6,8 +6,10 @@ import React, { useEffect, useState } from 'react';
 import CartModel from './CartModel';
 import { account } from '../context/appwrite';
 import { toast } from 'react-toastify';
+import { useCart } from '../context/cartContext';
 
 const NavIcons = () => {
+  const cart = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +25,6 @@ const NavIcons = () => {
         // Assuming user object has a role property to check admin status
         setIsAdmin(user.labels.includes('admin'));
       } catch (error) {
-        toast.error("Error fetching user:", error);
         setLoggedIn(false);
       } finally {
         setIsLoading(false); // Loading complete
@@ -77,7 +78,7 @@ const NavIcons = () => {
         <div 
           className="absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] rounded-full text-white text-sm flex items-center justify-center"
         >
-          2
+          {cart.cart.length}
         </div>
       </div>
 

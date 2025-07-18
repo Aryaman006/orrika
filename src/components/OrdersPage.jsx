@@ -24,7 +24,7 @@ const Orders = ({ onBack }) => {
         const ordersList = await databases.listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
           process.env.NEXT_PUBLIC_APPWRITE_ORDERS_ID,
-          [Query.equal('user', user.$id)]
+          // [Query.equal('user', user.$id)]
         );
 
         const parseOrders = ordersList.documents.map(order=>({
@@ -32,6 +32,7 @@ const Orders = ({ onBack }) => {
           products: order.products.map(product=>JSON.parse(product))
         }))
 
+console.log("parse",parseOrders);
 
         setOrders(parseOrders);
         setFilteredOrders(parseOrders);
@@ -84,9 +85,9 @@ const Orders = ({ onBack }) => {
           className="p-2 border rounded-md"
         >
           <option value="">All Statuses</option>
-          <option value="completed">Completed</option>
-          <option value="pending">Pending</option>
-          <option value="shipped">Shipped</option>
+          <option value="Completed">Completed</option>
+          <option value="Pending">Pending</option>
+          <option value="Shipped">Shipped</option>
         </select>
         <input
           type="number"

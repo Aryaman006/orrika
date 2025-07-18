@@ -5,7 +5,7 @@ console.log('Appwrite Project ID:', process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
 
 const client = new Client()
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
-  .setProject('669296990030574344ed')
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID)
   // .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
 
 const databases = new Databases(client);

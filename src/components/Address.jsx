@@ -19,15 +19,20 @@ const AddressPage = () => {
     const fetchAddresses = async () => {
       try {
         const user = await account.get(); // Get logged-in user details
+console.log(user);
 
         const addressList = await databases.listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
           process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_ID,
-          [Query.equal('userId', user.$id)]
+          [Query.equal('userid', user.$id)]
         );
+        console.log("address",addressList);
+        
 
         setAddresses(addressList.documents);
       } catch (error) {
+        console.log(error);
+        
         toast.error(error)
       } finally {
         setIsLoading(false);
@@ -40,33 +45,41 @@ const AddressPage = () => {
   const handleSaveAddress = async (address) => {
     try {
       const user = await account.get();
+      console.log(user);
+      
       if (addressToEdit) {
         // Update existing address
         await databases.updateDocument(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
           process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_ID,
           addressToEdit.$id,
-          { ...address, userId: user.$id } // Ensure userId is updated
+          { ...address, userid: user.$id } // Ensure userId is updated
         );
+console.log(address);
 
         setAddresses(addresses.map(addr =>
           addr.$id === addressToEdit.$id ? { ...addr, ...address } : addr
         ));
       } else {
+        console.log(address);
+        
         // Add new address
         const newAddress = await databases.createDocument(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
           process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_ID,
           'unique()', // Generate a unique ID
           {
-            userId: user.$id,
+            userid: user.$id,
             ...address,
           }
         );
+console.log(newAddress);
 
         setAddresses([...addresses, newAddress]);
       }
     } catch (error) {
+      console.log(error);
+      
     }
   };
 

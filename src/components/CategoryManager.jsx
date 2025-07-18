@@ -11,6 +11,7 @@ const CategoryManager = ({ onBack }) => {
   const [updateCategory, setUpdateCategory] = useState(null);
   const [updateCategoryName, setUpdateCategoryName] = useState('');
   const [updateCategoryImage, setUpdateCategoryImage] = useState(null);
+console.log(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
 
   const client = new Client();
   client.setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)

@@ -22,6 +22,9 @@ const fetchData = async () => {
       ),
     ]);
 
+    console.log(process.env.APPWRITE_DATABASE_ID);
+    
+
     return {
       categories: categoriesResponse.documents,
       slides: slidesResponse.documents,

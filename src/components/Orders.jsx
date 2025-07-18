@@ -28,6 +28,7 @@ const Orders = ({ onBack }) => {
           ...order,
           products: order.products.map(product => JSON.parse(product))
         }));
+console.log("parse",parseOrders);
 
         setOrders(parseOrders);
         setFilteredOrders(parseOrders);

@@ -18,8 +18,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
-      await account.create("unique()", email, password, username,address);
+      const response = await account.create("unique()", email, password, username,address);
       toast.success('email is registered successfully .');
+      console.log(response);
+      
       setIsLoading(true)
       setTimeout(() => {
         router.push("/login");

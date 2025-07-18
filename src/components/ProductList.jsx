@@ -33,7 +33,7 @@ const ProductList = ({ products }) => {
           </div>
           <div className="flex justify-between">
             <span className="font-medium">{product.name}</span>
-            <span className="font-semibold">${product.price}</span>
+            <span className="font-semibold">₹{product.price}</span>
           </div>
           <div className="text-sm text-gray-500">{product.description}</div>
           <button className="text-xs rounded-2xl ring-1 w-max ring-[#F35C7A] text-[#F35C7A] py-2 px-4 hover:bg-[#F35C7A] hover:text-white">

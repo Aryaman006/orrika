@@ -54,14 +54,14 @@ const handleImageUpload = async (e) => {
 
     try {
         const response = await storage.createFile(
-            process.env.NEXT_PUBLIC_APPWRITE_SLIDER_BUCKET_ID, // Your bucket ID
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID, // Your bucket ID
             ID.unique(),  // Generates a unique ID for the file
             file  // Pass the selected file object
         );
 
         // Generate the URL to view the file
         const url = storage.getFileView(
-            process.env.NEXT_PUBLIC_APPWRITE_SLIDER_BUCKET_ID,
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
             response.$id
         );
 
@@ -100,6 +100,8 @@ const handleImageUpload = async (e) => {
       resetForm();
       fetchSliders();
     } catch (error) {
+      console.log(error);
+      
       toast.error('Failed to save slider', error);
     }
   };

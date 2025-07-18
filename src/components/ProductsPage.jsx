@@ -137,6 +137,7 @@ const ProductsPage = ({onBack}) => {
         post: validImageUrls,
         variants: serializedVariants,
       };
+  console.log(productData);
   
       await databases.createDocument(
         process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
@@ -156,7 +157,9 @@ const ProductsPage = ({onBack}) => {
       setVariants([{ id: 1, color: '', sizes: [{ size: '', price: '', stock: '' }] }]);
     } catch (error) {
       toast.error('Failed to create product:', error);
-      alert(`Error: ${error.message}`);
+      console.log(error);
+      
+      // alert(`Error: ${error.message}`);
     }
   };
 

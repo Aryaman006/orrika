@@ -11,6 +11,7 @@ const CartModel = () => {
   const { cart, setCart } = useCart(); // Retrieve cart items from context
   const router = useRouter();
   const [user, setUser] = useState(null); 
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [isVisible, setIsVisible] = useState(true); // Add state for modal visibility
   const [paymentMethod, setPaymentMethod] = useState('razorpay'); // Default payment method is Razorpay
 
@@ -19,9 +20,18 @@ const CartModel = () => {
     const fetchUserData = async () => {
       try {
         const userData = await account.get();
+         const addressList = await databases.listDocuments(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+          process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_ID,
+          [Query.equal('userid', userData.$id)]
+        );
+        setAddresses(addressList.documents);
+        if (addressList.documents.length > 0) {
+          
+          setSelectedAddress(addressList.documents[0]); // Set the default selected address
+        }
         setUser(userData);
       } catch (error) {
-        toast.error("Failed to fetch user data");
       }
     };
 
@@ -84,7 +94,7 @@ const CartModel = () => {
                 user: user.$id, // Pass the actual user data
                 products: cart,
                 total: subtotal, // Total amount in rupees
-                shippingAddress: "Your Shipping Address" // Pass the actual shipping address
+                shippingAddress: selectedAddress, // Pass the actual shipping address
               }),
               headers: {
                 'Content-Type': 'application/json',
@@ -123,7 +133,7 @@ const CartModel = () => {
           userId: user.$id,
           cart,
           total: subtotal,
-          shippingAddress: 'Your Shipping Address Here', // Add actual shipping address
+          shippingAddress: selectedAddress, // Add actual shipping address
           paymentMethod: 'cod'
         }),
         headers: {

@@ -18,6 +18,8 @@ export async function POST(req) {
       image: item.imageUrl,
       price: item.variant.price || item.price
     }));
+    console.log("products",productDetails);
+    
 console.log(formattedAddress)
     // Create a unique ID for the order
     const orderId = crypto.randomUUID();
@@ -31,7 +33,7 @@ console.log(formattedAddress)
         user: userId, // String
         products: productDetails, // String[] (Array of Strings)
         totalPrice: total, // Integer
-        status: 'pending', // Enum (pending by default)
+        status: 'Pending', // Enum (pending by default)
         paymentStatus: paymentMethod, // String
         shippingAddress: formattedAddress, // String (Max 50 characters)
       }

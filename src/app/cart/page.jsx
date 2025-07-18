@@ -25,25 +25,35 @@ const CartPage = () => {
       try {
         const userData = await account.get();
         setUser(userData);
-        console.log(userData);
+        console.log("user",userData);
 
         // Fetch the user's saved addresses
         const addressList = await databases.listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
           process.env.NEXT_PUBLIC_APPWRITE_ADDRESSES_ID,
-          [Query.equal('userId', userData.$id)]
+          [Query.equal('userid', userData.$id)]
         );
+        console.log(addressList.documents);
+        
         setAddresses(addressList.documents);
+        
         if (addressList.documents.length > 0) {
           setSelectedAddress(addressList.documents[0]); // Set the default selected address
         }
       } catch (error) {
+        console.log(error);
+        
         toast.error("Failed to fetch user data.");
       }
     };
 
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+  console.log("Updated addresses state:", addresses);
+}, [addresses]);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -288,7 +298,7 @@ const CartPage = () => {
                   >
                     {addresses.map((address) => (
                       <option key={address.$id} value={address.$id}>
-                        {`${address.name}, ${address.street}, ${address.city}, ${address.state} - ${address.zip}`}
+                        {`${address.name}, ${address.address}, ${address.city}, (${address.state},|| " ") pincode- ${address.pincode}`}
                       </option>
                     ))}
                   </select>
